@@ -1,0 +1,15 @@
+---
+# Monitoring server specific variables
+install_prometheus: true
+install_grafana: true
+
+# Prometheus targets (based on your infrastructure)
+prometheus_targets:
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets:
+          - '10.0.1.36:9100'  # geth-1 node
+
+# Grafana admin credentials
+grafana_admin_user: admin
+grafana_admin_password: admin123  # Change this in production

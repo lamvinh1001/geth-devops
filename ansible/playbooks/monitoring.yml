@@ -1,0 +1,20 @@
+---
+- name: Setup Node Exporter on Geth Nodes
+  hosts: geth_nodes
+  become: yes
+  roles:
+    - node_exporter
+  tags:
+    - node_exporter
+    - geth
+
+- name: Setup Prometheus and Grafana
+  hosts: monitoring
+  become: yes
+  roles:
+    - prometheus
+    - grafana
+  tags:
+    - monitoring
+    - prometheus
+    - grafana

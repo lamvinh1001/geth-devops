@@ -1,0 +1,27 @@
+---
+# Common variables
+ansible_ssh_private_key_file: ~/.ssh/ethereum-devops-ssh-key.pem
+ansible_user: ubuntu
+
+# Monitoring versions
+node_exporter_version: "1.7.0"
+prometheus_version: "2.48.1"
+grafana_version: "10.2.3"
+
+# Network configuration
+prometheus_port: 9090
+grafana_port: 3000
+node_exporter_port: 9100
+
+# Prometheus configuration
+prometheus_config_dir: /etc/prometheus
+prometheus_data_dir: /var/lib/prometheus
+prometheus_user: prometheus
+
+# Grafana configuration
+grafana_config_dir: /etc/grafana
+grafana_data_dir: /var/lib/grafana
+grafana_user: grafana
+
+# Node Exporter configuration
+node_exporter_user: node_exporter
