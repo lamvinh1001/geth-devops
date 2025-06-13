@@ -20,7 +20,7 @@ scrape_configs:
     static_configs:
       - targets:
 {% for host in groups['geth_nodes'] %}
-          - '{{ hostvars[host]['ansible_host'] }}:{{ node_exporter_port }}'
+          - '{{ hostvars[host]['ansible_host'] }}:9100'
 {% endfor %}
     scrape_interval: 10s
     metrics_path: /metrics
