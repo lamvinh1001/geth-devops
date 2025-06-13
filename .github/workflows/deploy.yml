@@ -98,6 +98,10 @@ jobs:
 
     # - name: Wait for instances to be ready
     #   run: sleep 120
+    - name: Test SSH via Bastion to geth-1
+      run: |
+        ssh -o ProxyCommand="ssh -W %h:%p -q -i /home/runner/.ssh/ethereum-devops-ssh-key.pem ubuntu@54.255.190.26" \
+        -i /home/runner/.ssh/ethereum-devops-ssh-key.pem ubuntu@10.0.1.36 'echo connected'
 
     - name: Run Ansible Playbook
       run: |
