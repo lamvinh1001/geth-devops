@@ -100,8 +100,11 @@ jobs:
     #   run: sleep 120
     - name: Debug SSH proxy manually
       run: |
-        ssh -o ProxyCommand='ssh -W %h:%p -o StrictHostKeyChecking=no -i /home/runner/.ssh/ethereum-devops-ssh-key.pem ubuntu@54.255.190.26' \
-        -i /home/runner/.ssh/ethereum-devops-ssh-key.pem ubuntu@10.0.1.36 'echo connected'
+        ssh -o ProxyCommand='ssh -W %h:%p -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/runner/.ssh/ethereum-devops-ssh-key.pem ubuntu@54.255.190.26' \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -i /home/runner/.ssh/ethereum-devops-ssh-key.pem \
+        ubuntu@10.0.1.36 'echo SSH successful'
 
     - name: Run Ansible Playbook
       run: |
