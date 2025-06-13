@@ -89,6 +89,7 @@ jobs:
 
     - name: Retrieve SSH Key from Secrets Manager
       run: |
+        mkdir -p ~/.ssh
         aws secretsmanager get-secret-value \
           --secret-id ethereum-devops-ssh-private-key \
           --query SecretString \
