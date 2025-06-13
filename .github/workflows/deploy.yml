@@ -96,12 +96,12 @@ jobs:
           --output text > ~/.ssh/ethereum-devops-ssh-key.pem
         chmod 600 ~/.ssh/ethereum-devops-ssh-key.pem
 
-    - name: Wait for instances to be ready
-      run: sleep 120
+    # - name: Wait for instances to be ready
+    #   run: sleep 120
 
     - name: Run Ansible Playbook
       run: |
-        ansible-playbook -i inventory/hosts.yml playbooks/monitoring.yaml -v
+        ansible-playbook -i inventory/hosts.yml playbooks/monitoring.yml -v
 
 
   # test:
