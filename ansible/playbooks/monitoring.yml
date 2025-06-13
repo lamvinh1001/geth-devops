@@ -4,10 +4,6 @@
   become: yes
   roles:
     - node_exporter
-  tags:
-    - node_exporter
-    - geth
-
 - name: Setup Prometheus and Grafana
   hosts: monitoring
   become: yes
