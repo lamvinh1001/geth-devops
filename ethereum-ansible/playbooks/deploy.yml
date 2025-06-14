@@ -18,6 +18,7 @@
   roles:
     - node_exporter
     - geth_node
+
   post_tasks:
     - name: Wait for Geth to be ready
       wait_for:
