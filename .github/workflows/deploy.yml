@@ -93,8 +93,8 @@ jobs:
         aws secretsmanager get-secret-value \
           --secret-id ethereum-devops-private-key \
           --query SecretString \
-          --output text > ~/.ssh/ethereum-devops-private-key.pem
-        chmod 600 ~/.ssh/ethereum-devops-private-key.pem
+          --output text > ~/.ssh/ethereum-devops-ssh-private-key.pem
+        chmod 600 ~/.ssh/ethereum-devops-ssh-private-key.pem
 
     - name: Run Ansible Playbook
       run: |
