@@ -96,13 +96,13 @@ jobs:
           --output text > ~/.ssh/ethereum-devops-private-key.pem
         chmod 600 ~/.ssh/ethereum-devops-private-key.pem
 
-    - name: Debug SSH proxy manually
-      run: |
-        ssh -o ProxyCommand='ssh -W %h:%p -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/runner/.ssh/ethereum-devops-private-key.pem ubuntu@47.129.36.151' \
-        -o StrictHostKeyChecking=no \
-        -o UserKnownHostsFile=/dev/null \
-        -i /home/runner/.ssh/ethereum-devops-private-key.pem \
-        ubuntu@10.0.1.90 'echo SSH successful'
+    # - name: Debug SSH proxy manually
+    #   run: |
+    #     ssh -o ProxyCommand='ssh -W %h:%p -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/runner/.ssh/ethereum-devops-private-key.pem ubuntu@47.129.36.151' \
+    #     -o StrictHostKeyChecking=no \
+    #     -o UserKnownHostsFile=/dev/null \
+    #     -i /home/runner/.ssh/ethereum-devops-private-key.pem \
+    #     ubuntu@10.0.1.90 'echo SSH successful'
     - name: Run Ansible Playbook
       run: |
         ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml -v

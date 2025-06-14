@@ -60,6 +60,11 @@
     mode: '0644'
   notify: restart geth
 
+- name: Check if geth is already initialized
+  stat:
+    path: "{{ geth_data_dir }}/geth/chaindata"
+  register: geth_chaindata
+
 - name: Initialize Geth with genesis block
   command: >
     /usr/local/bin/geth
@@ -67,10 +72,9 @@
     init {{ geth_home }}/genesis.json
   become: yes
   become_user: "{{ geth_user }}"
-  creates: "{{ geth_data_dir }}/geth/chaindata"
   environment:
     HOME: "{{ geth_home }}"
-
+  when: not geth_chaindata.stat.exists
 
 - name: Generate static-nodes.json
   template:
