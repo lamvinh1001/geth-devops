@@ -1,12 +1,10 @@
 ---
-- name: Install required packages
+- name: Install Grafana dependencies
   apt:
     name:
-      - apt-transport-https
-      - software-properties-common
-      - wget
+      - adduser
+      - libfontconfig1
     state: present
-    update_cache: yes
 
 - name: Add Grafana GPG key
   apt_key:
@@ -24,7 +22,7 @@
     state: present
     update_cache: yes
 
-- name: Create grafana directories
+- name: Create Grafana directories
   file:
     path: "{{ item }}"
     state: directory
@@ -44,67 +42,44 @@
     owner: root
     group: "{{ grafana_group }}"
     mode: '0640'
-  notify:
-    - restart grafana
+  notify: restart grafana
 
-- name: Create Grafana provisioning directories
-  file:
-    path: "{{ grafana_config_dir }}/provisioning/{{ item }}"
-    state: directory
-    owner: root
-    group: "{{ grafana_group }}"
-    mode: '0755'
-  loop:
-    - datasources
-    - dashboards
-
-- name: Configure Prometheus datasource
+- name: Create Grafana datasource configuration
   template:
-    src: prometheus-datasource.yml.j2
-    dest: "{{ grafana_config_dir }}/provisioning/datasources/prometheus.yml"
+    src: datasources.yml.j2
+    dest: "{{ grafana_config_dir }}/provisioning/datasources/datasources.yml"
     owner: root
     group: "{{ grafana_group }}"
     mode: '0644'
-  notify:
-    - restart grafana
+  notify: restart grafana
 
-- name: Configure dashboard provider
+- name: Create Grafana dashboard configuration
   template:
-    src: dashboard-provider.yml.j2
-    dest: "{{ grafana_config_dir }}/provisioning/dashboards/default.yml"
+    src: dashboards.yml.j2
+    dest: "{{ grafana_config_dir }}/provisioning/dashboards/dashboards.yml"
     owner: root
     group: "{{ grafana_group }}"
     mode: '0644'
-  notify:
-    - restart grafana
+  notify: restart grafana
 
 - name: Copy Node Exporter dashboard
-  copy:
-    src: node-exporter-dashboard.json
+  template:
+    src: node-exporter-dashboard.json.j2
     dest: "{{ grafana_data_dir }}/dashboards/node-exporter-dashboard.json"
     owner: "{{ grafana_user }}"
     group: "{{ grafana_group }}"
     mode: '0644'
 
-- name: Enable and start Grafana service
+- name: Start and enable Grafana service
   systemd:
     name: grafana-server
-    enabled: yes
     state: started
+    enabled: yes
     daemon_reload: yes
 
 - name: Wait for Grafana to start
   wait_for:
     port: "{{ grafana_port }}"
-    host: "0.0.0.0"
+    host: "{{ ansible_host }}"
     delay: 10
     timeout: 60
-
-- name: Verify Grafana is running
-  uri:
-    url: "http://localhost:{{ grafana_port }}/api/health"
-    method: GET
-    timeout: 10
-  register: grafana_check
-  retries: 3
-  delay: 5
