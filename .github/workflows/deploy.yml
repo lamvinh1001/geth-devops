@@ -102,7 +102,7 @@ jobs:
         -o StrictHostKeyChecking=no \
         -o UserKnownHostsFile=/dev/null \
         -i /home/runner/.ssh/ethereum-devops-private-key.pem \
-        ubuntu@10.0.1.162 'echo SSH successful'
+        ubuntu@10.0.1.90 'echo SSH successful'
     - name: Run Ansible Playbook
       run: |
         ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml -v
