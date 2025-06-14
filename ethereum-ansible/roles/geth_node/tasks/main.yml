@@ -106,4 +106,4 @@
     port: "{{ geth_rpc_port }}"
     host: "{{ ansible_host }}"
     delay: 10
-    timeout: 60
+    timeout: 100
