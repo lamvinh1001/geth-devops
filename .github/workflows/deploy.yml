@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ansible_temp
+        working-directory: ethereum-ansible
 
     steps:
     - name: Checkout
