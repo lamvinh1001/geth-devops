@@ -1,0 +1,16 @@
+---
+# Geth nodes specific variables
+install_node_exporter: true
+node_exporter_enabled_collectors:
+  - systemd
+  - textfile
+  - filesystem
+  - cpu
+  - diskstats
+  - loadavg
+  - meminfo
+  - netdev
+  - netstat
+  - stat
+  - time
+  - uname
