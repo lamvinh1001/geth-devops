@@ -69,7 +69,8 @@
   become_user: "{{ geth_user }}"
   creates: "{{ geth_data_dir }}/geth/chaindata"
   environment:
-    HOME: "{{ geth_home }}
+    HOME: "{{ geth_home }}"
+
 
 - name: Generate static-nodes.json
   template:
