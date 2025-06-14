@@ -1,0 +1,8 @@
+---
+prometheus_version: "2.48.0"
+prometheus_user: prometheus
+prometheus_group: prometheus
+prometheus_home: /opt/prometheus
+prometheus_data_dir: /opt/prometheus/data
+prometheus_config_dir: /etc/prometheus
+prometheus_port: 9090

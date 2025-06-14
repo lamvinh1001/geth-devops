@@ -1,0 +1,16 @@
+---
+# Prometheus Configuration
+prometheus_user: prometheus
+prometheus_group: prometheus
+prometheus_home: /opt/prometheus
+prometheus_data_dir: /opt/prometheus/data
+prometheus_config_dir: /etc/prometheus
+prometheus_binary_url: "https://github.com/prometheus/prometheus/releases/download/v2.48.0/prometheus-2.48.0.linux-amd64.tar.gz"
+
+# Grafana Configuration
+grafana_user: grafana
+grafana_group: grafana
+grafana_home: /opt/grafana
+grafana_data_dir: /var/lib/grafana
+grafana_config_dir: /etc/grafana
+grafana_log_dir: /var/log/grafana

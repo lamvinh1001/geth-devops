@@ -1,0 +1,46 @@
+---
+- name: Deploy Private Ethereum Network with Monitoring
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Display deployment information
+      debug:
+        msg: |
+          Starting deployment of Private Ethereum Network
+          Geth RPC Endpoint: {{ geth_rpc_endpoint }}
+          Grafana URL: http://54.169.122.189:3000
+          Prometheus URL: http://10.0.2.70:9090 (internal)
+
+- name: Setup Geth Nodes
+  hosts: geth_nodes
+  become: yes
+  serial: 1
+  roles:
+    - node_exporter
+    - geth_node
+  post_tasks:
+    - name: Wait for Geth to be ready
+      wait_for:
+        port: "{{ geth_rpc_port }}"
+        host: "{{ ansible_host }}"
+        delay: 10
+        timeout: 60
+
+- name: Setup Monitoring Infrastructure
+  hosts: monitoring
+  become: yes
+  roles:
+    - prometheus_server
+    - grafana_server
+  post_tasks:
+    - name: Display access information
+      debug:
+        msg: |
+          Deployment completed successfully!
+          
+          Access URLs:
+          - Geth RPC: {{ geth_rpc_endpoint }}
+          - Grafana: http://{{ ansible_host }}:{{ grafana_port }}
+          - Prometheus: http://{{ ansible_host }}:{{ prometheus_port }}
+          
+          Default Grafana credentials: admin/admin

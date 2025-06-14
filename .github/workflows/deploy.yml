@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ansible
+        working-directory: ethereum-ansible
     
     steps:
     - name: Checkout
@@ -91,24 +91,14 @@ jobs:
       run: |
         mkdir -p ~/.ssh
         aws secretsmanager get-secret-value \
-          --secret-id ethereum-devops-ssh-private-key \
+          --secret-id ethereum-devops-private-key \
           --query SecretString \
-          --output text > ~/.ssh/ethereum-devops-ssh-key.pem
-        chmod 600 ~/.ssh/ethereum-devops-ssh-key.pem
-        cat ~/.ssh/ethereum-devops-ssh-key.pem
-    # - name: Wait for instances to be ready
-    #   run: sleep 120
-    - name: Debug SSH proxy manually
-      run: |
-        ssh -o ProxyCommand='ssh -W %h:%p -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/runner/.ssh/ethereum-devops-ssh-key.pem ubuntu@54.255.190.26' \
-        -o StrictHostKeyChecking=no \
-        -o UserKnownHostsFile=/dev/null \
-        -i /home/runner/.ssh/ethereum-devops-ssh-key.pem \
-        ubuntu@10.0.1.36 'echo SSH successful'
+          --output text > ~/.ssh/ethereum-devops-private-key.pem
+        chmod 600 ~/.ssh/ethereum-devops-private-key.pem
 
     - name: Run Ansible Playbook
       run: |
-        ansible-playbook -i inventory/hosts.yml playbooks/monitoring.yml -v
+        ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml -v
 
   # test:
   #   name: 'Test Deployment' 

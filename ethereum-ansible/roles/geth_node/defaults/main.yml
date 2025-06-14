@@ -1,0 +1,11 @@
+---
+geth_version: "1.13.14"
+geth_user: geth
+geth_group: geth
+geth_home: /opt/geth
+geth_data_dir: /opt/geth/data
+geth_log_dir: /var/log/geth
+chain_id: 1337
+network_id: 1337
+geth_rpc_port: 8545
+geth_p2p_port: 30303

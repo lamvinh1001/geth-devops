@@ -1,0 +1,8 @@
+---
+# Geth specific variables
+geth_binary_url: "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.13.14-2bd6bd01.tar.gz"
+geth_user: geth
+geth_group: geth
+geth_home: /opt/geth
+geth_data_dir: /opt/geth/data
+geth_log_dir: /var/log/geth

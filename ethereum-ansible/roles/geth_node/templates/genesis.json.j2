@@ -1,0 +1,26 @@
+{
+  "config": {
+    "chainId": {{ chain_id }},
+    "homesteadBlock": 0,
+    "eip150Block": 0,
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0,
+    "petersburgBlock": 0,
+    "istanbulBlock": 0,
+    "berlinBlock": 0,
+    "londonBlock": 0,
+    "clique": {
+      "period": 15,
+      "epoch": 30000
+    }
+  },
+  "difficulty": "0x400",
+  "gasLimit": "0x8000000",
+  "extradata": "0x0000000000000000000000000000000000000000000000000000000000000000{{ hostvars[groups['geth_nodes'][0]]['ansible_host'] | replace('.', '') }}0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+  "alloc": {
+    "0x7df9a875a174b3bc565e6424a0050ebc1b2d1d82": { "balance": "300000" },
+    "0xf41c74c9ae680c1aa78f42e5647a62f353b7bdde": { "balance": "400000" }
+  }
+}

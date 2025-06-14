@@ -1,0 +1,99 @@
+---
+- name: Update system packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install required packages
+  apt:
+    name:
+      - curl
+      - wget
+      - unzip
+      - software-properties-common
+      - build-essential
+    state: present
+
+- name: Create geth user
+  user:
+    name: "{{ geth_user }}"
+    system: yes
+    shell: /bin/bash
+    home: "{{ geth_home }}"
+    create_home: yes
+
+- name: Create geth directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ geth_user }}"
+    group: "{{ geth_group }}"
+    mode: '0755'
+  loop:
+    - "{{ geth_home }}"
+    - "{{ geth_data_dir }}"
+    - "{{ geth_log_dir }}"
+    - /etc/geth
+
+- name: Download and extract Geth
+  unarchive:
+    src: "{{ geth_binary_url }}"
+    dest: /tmp
+    remote_src: yes
+    creates: /tmp/geth-linux-amd64-1.13.14-2bd6bd01
+
+- name: Install Geth binary
+  copy:
+    src: /tmp/geth-linux-amd64-1.13.14-2bd6bd01/geth
+    dest: /usr/local/bin/geth
+    mode: '0755'
+    owner: root
+    group: root
+    remote_src: yes
+
+- name: Create genesis.json
+  template:
+    src: genesis.json.j2
+    dest: "{{ geth_home }}/genesis.json"
+    owner: "{{ geth_user }}"
+    group: "{{ geth_group }}"
+    mode: '0644'
+  notify: restart geth
+
+- name: Initialize Geth with genesis block
+  command: /usr/local/bin/geth --datadir {{ geth_data_dir }} init {{ geth_home }}/genesis.json
+  become_user: "{{ geth_user }}"
+  args:
+    creates: "{{ geth_data_dir }}/geth/chaindata"
+
+- name: Generate static-nodes.json
+  template:
+    src: static-nodes.json.j2
+    dest: "{{ geth_data_dir }}/static-nodes.json"
+    owner: "{{ geth_user }}"
+    group: "{{ geth_group }}"
+    mode: '0644'
+  notify: restart geth
+
+- name: Create Geth systemd service
+  template:
+    src: geth.service.j2
+    dest: /etc/systemd/system/geth.service
+    mode: '0644'
+  notify:
+    - reload systemd
+    - restart geth
+
+- name: Start and enable Geth service
+  systemd:
+    name: geth
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+- name: Wait for Geth to start
+  wait_for:
+    port: "{{ geth_rpc_port }}"
+    host: "{{ ansible_host }}"
+    delay: 10
+    timeout: 60

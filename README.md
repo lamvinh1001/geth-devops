@@ -41,7 +41,7 @@ This project implements a comprehensive DevOps solution featuring a private Ethe
    cd ../ansible
    # Retrieve SSH key from AWS Secrets Manager
    aws secretsmanager get-secret-value \
-     --secret-id ethereum-devops-ssh-private-key \
+     --secret-id ethereum-devops-private-key \
      --query SecretString \
      --output text > ~/.ssh/ethereum-devops-deployer.pem
    chmod 600 ~/.ssh/ethereum-devops-deployer.pem

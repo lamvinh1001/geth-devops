@@ -1,0 +1,37 @@
+---
+# Global Configuration
+chain_id: 1337
+network_id: 1337
+geth_version: "1.13.14"
+node_exporter_version: "1.7.0"
+prometheus_version: "2.48.0"
+grafana_version: "10.2.0"
+
+# Network Configuration
+geth_nodes:
+  - { ip: "10.0.1.162", id: 1 }
+  - { ip: "10.0.3.21", id: 2 }
+  - { ip: "10.0.1.90", id: 3 }
+
+# Ports
+geth_rpc_port: 8545
+geth_p2p_port: 30303
+node_exporter_port: 9100
+prometheus_port: 9090
+grafana_port: 3000
+
+# Directories
+geth_home: /opt/geth
+geth_data_dir: /opt/geth/data
+prometheus_home: /opt/prometheus
+grafana_home: /opt/grafana
+
+# Users
+geth_user: geth
+prometheus_user: prometheus
+grafana_user: grafana
+node_exporter_user: node_exporter
+
+# ALB Configuration
+alb_dns_name: "ethereum-devops-geth-alb-300190512.ap-southeast-1.elb.amazonaws.com"
+geth_rpc_endpoint: "http://ethereum-devops-geth-alb-300190512.ap-southeast-1.elb.amazonaws.com"
