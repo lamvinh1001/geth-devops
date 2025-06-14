@@ -100,20 +100,20 @@ output "prometheus_url" {
   value       = "http://${aws_instance.monitoring.private_ip}:9090"
 }
 
-# Connection Instructions
-output "connection_instructions" {
-  description = "Instructions for connecting to the infrastructure"
-  value       = <<-EOT
-    SSH to bastion: ssh -i ~/.ssh/${aws_key_pair.this.key_name}.pem ubuntu@${aws_instance.bastion.public_ip}
+# # Connection Instructions
+# output "connection_instructions" {
+#   description = "Instructions for connecting to the infrastructure"
+#   value       = <<-EOT
+#     SSH to bastion: ssh -i ~/.ssh/${aws_key_pair.this.key_name}.pem ubuntu@${aws_instance.bastion.public_ip}
 
-    From bastion, connect to Geth nodes:
-    ${join("\n    ", formatlist("ssh ubuntu@%s", aws_instance.geth[*].private_ip))}
+#     From bastion, connect to Geth nodes:
+#     ${join("\n    ", formatlist("ssh ubuntu@%s", aws_instance.geth[*].private_ip))}
 
-    Grafana Dashboard: http://${aws_instance.monitoring.public_ip}:3000
-    Geth RPC Endpoint: http://${aws_lb.geth_rpc.dns_name}
+#     Grafana Dashboard: http://${aws_instance.monitoring.public_ip}:3000
+#     Geth RPC Endpoint: http://${aws_lb.geth_rpc.dns_name}
 
-    Note: Download the private key from AWS Secrets Manager:
-    aws secretsmanager get-secret-value --secret-id ${aws_secretsmanager_secret.ssh_private_key.name} --query SecretString --output text > ~/.ssh/${aws_key_pair.this.key_name}.pem
-    chmod 600 ~/.ssh/${aws_key_pair.this.key_name}.pem
-  EOT
-}
+#     Note: Download the private key from AWS Secrets Manager:
+#     aws secretsmanager get-secret-value --secret-id ${aws_secretsmanager_secret.ssh_private_key.name} --query SecretString --output text > ~/.ssh/${aws_key_pair.this.key_name}.pem
+#     chmod 600 ~/.ssh/${aws_key_pair.this.key_name}.pem
+#   EOT
+# }
