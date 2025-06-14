@@ -61,10 +61,15 @@
   notify: restart geth
 
 - name: Initialize Geth with genesis block
-  command: /usr/local/bin/geth --datadir {{ geth_data_dir }} init {{ geth_home }}/genesis.json
+  command: >
+    /usr/local/bin/geth
+    --datadir {{ geth_data_dir }}
+    init {{ geth_home }}/genesis.json
+  become: yes
   become_user: "{{ geth_user }}"
-  args:
-    creates: "{{ geth_data_dir }}/geth/chaindata"
+  creates: "{{ geth_data_dir }}/geth/chaindata"
+  environment:
+    HOME: "{{ geth_home }}
 
 - name: Generate static-nodes.json
   template:
