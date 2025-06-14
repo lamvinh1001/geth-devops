@@ -74,9 +74,18 @@
     enabled: yes
     daemon_reload: yes
 
-- name: Wait for Prometheus to start
+- name: Wait for prometheus to start
   wait_for:
     port: "{{ prometheus_port }}"
-    host: "{{ ansible_host }}"
+    host: "0.0.0.0"
     delay: 10
     timeout: 60
+
+- name: Verify prometheus is running
+  uri:
+    url: "http://localhost:{{ prometheus_port }}/-/healthy"
+    method: GET
+    timeout: 10
+  register: prometheus_check
+  retries: 3
+  delay: 5
