@@ -1,15 +1,15 @@
 ---
-- name: Deploy Private Ethereum Network with Monitoring
-  hosts: localhost
-  gather_facts: false
-  tasks:
-    - name: Display deployment information
-      debug:
-        msg: |
-          Starting deployment of Private Ethereum Network
-          Geth RPC Endpoint: {{ geth_rpc_endpoint }}
-          Grafana URL: http://54.169.122.189:3000
-          Prometheus URL: http://10.0.2.70:9090 (internal)
+# - name: Deploy Private Ethereum Network with Monitoring
+#   hosts: localhost
+#   gather_facts: false
+#   tasks:
+#     - name: Display deployment information
+#       debug:
+#         msg: |
+#           Starting deployment of Private Ethereum Network
+#           Geth RPC Endpoint: {{ geth_rpc_endpoint }}
+#           Grafana URL: http://54.169.122.189:3000
+#           Prometheus URL: http://10.0.2.70:9090 (internal)
 
 - name: Setup Geth Nodes
   hosts: geth_nodes
