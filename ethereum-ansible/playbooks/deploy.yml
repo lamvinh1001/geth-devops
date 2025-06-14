@@ -45,15 +45,3 @@
   roles:
     - prometheus_server
     - grafana_server
-  post_tasks:
-    - name: Display access information
-      debug:
-        msg: |
-          Deployment completed successfully!
-          
-          Access URLs:
-          - Geth RPC: {{ geth_rpc_endpoint }}
-          - Grafana: http://{{ ansible_host }}:{{ grafana_port }}
-          - Prometheus: http://{{ ansible_host }}:{{ prometheus_port }}
-          
-          Default Grafana credentials: admin/admin
