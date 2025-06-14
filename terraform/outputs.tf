@@ -50,21 +50,21 @@ output "monitoring_public_ip" {
   value       = aws_instance.monitoring.public_ip
 }
 
-# # Load Balancer Outputs
-# output "alb_dns_name" {
-#   description = "DNS name of the Application Load Balancer"
-#   value       = aws_lb.geth_rpc.dns_name
-# }
+# Load Balancer Outputs
+output "alb_dns_name" {
+  description = "DNS name of the Application Load Balancer"
+  value       = aws_lb.geth_rpc.dns_name
+}
 
-# output "alb_zone_id" {
-#   description = "Hosted zone ID of the Application Load Balancer"
-#   value       = aws_lb.geth_rpc.zone_id
-# }
+output "alb_zone_id" {
+  description = "Hosted zone ID of the Application Load Balancer"
+  value       = aws_lb.geth_rpc.zone_id
+}
 
-# output "geth_rpc_endpoint" {
-#   description = "Geth RPC endpoint URL"
-#   value       = "http://${aws_lb.geth_rpc.dns_name}"
-# }
+output "geth_rpc_endpoint" {
+  description = "Geth RPC endpoint URL"
+  value       = "http://${aws_lb.geth_rpc.dns_name}"
+}
 
 # Security Group Outputs
 output "security_group_ids" {
@@ -101,19 +101,19 @@ output "prometheus_url" {
 }
 
 # Connection Instructions
-# output "connection_instructions" {
-#   description = "Instructions for connecting to the infrastructure"
-#   value       = <<-EOT
-#     SSH to bastion: ssh -i ~/.ssh/${aws_key_pair.this.key_name}.pem ubuntu@${aws_instance.bastion.public_ip}
+output "connection_instructions" {
+  description = "Instructions for connecting to the infrastructure"
+  value       = <<-EOT
+    SSH to bastion: ssh -i ~/.ssh/${aws_key_pair.this.key_name}.pem ubuntu@${aws_instance.bastion.public_ip}
 
-#     From bastion, connect to Geth nodes:
-#     ${join("\n    ", formatlist("ssh ubuntu@%s", aws_instance.geth[*].private_ip))}
+    From bastion, connect to Geth nodes:
+    ${join("\n    ", formatlist("ssh ubuntu@%s", aws_instance.geth[*].private_ip))}
 
-#     Grafana Dashboard: http://${aws_instance.monitoring.public_ip}:3000
-#     Geth RPC Endpoint: http://${aws_lb.geth_rpc.dns_name}
+    Grafana Dashboard: http://${aws_instance.monitoring.public_ip}:3000
+    Geth RPC Endpoint: http://${aws_lb.geth_rpc.dns_name}
 
-#     Note: Download the private key from AWS Secrets Manager:
-#     aws secretsmanager get-secret-value --secret-id ${aws_secretsmanager_secret.ssh_private_key.name} --query SecretString --output text > ~/.ssh/${aws_key_pair.this.key_name}.pem
-#     chmod 600 ~/.ssh/${aws_key_pair.this.key_name}.pem
-#   EOT
-# }
+    Note: Download the private key from AWS Secrets Manager:
+    aws secretsmanager get-secret-value --secret-id ${aws_secretsmanager_secret.ssh_private_key.name} --query SecretString --output text > ~/.ssh/${aws_key_pair.this.key_name}.pem
+    chmod 600 ~/.ssh/${aws_key_pair.this.key_name}.pem
+  EOT
+}

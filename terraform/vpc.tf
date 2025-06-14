@@ -5,9 +5,9 @@ module "vpc" {
   name = "${var.project_name}-vpc"
   cidr = var.vpc_cidr
 
-  azs             = slice(data.aws_availability_zones.available.names, 0, 1)
-  private_subnets = ["10.0.1.0/24"]
-  public_subnets  = ["10.0.2.0/24"]
+  azs             = slice(data.aws_availability_zones.available.names, 0, 2)
+  private_subnets = var.private_subnet_cidrs
+  public_subnets  = var.public_subnet_cidrs
 
   enable_nat_gateway   = true
   enable_vpn_gateway   = false
