@@ -6,4 +6,7 @@ module "s3_bucket" {
   versioning = {
     enabled = true
   }
+  tags = merge(local.common_tags, {
+    Name = "${var.project_name}-bucket"
+  })
 }

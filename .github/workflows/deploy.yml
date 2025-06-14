@@ -12,55 +12,55 @@ env:
   AWS_REGION: 'ap-southeast-1'
 
 jobs:
-  # terraform:
-  #   name: 'Terraform'
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: terraform
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
     
-  #   outputs:
-  #     bastion_ip: ${{ steps.terraform_output.outputs.bastion_ip }}
+    outputs:
+      bastion_ip: ${{ steps.terraform_output.outputs.bastion_ip }}
       
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v4
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
 
-  #   - name: Setup Terraform
-  #     uses: hashicorp/setup-terraform@v3
-  #     with:
-  #       terraform_version: ${{ env.TF_VERSION }}
-  #       terraform_wrapper: false
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TF_VERSION }}
+        terraform_wrapper: false
 
-  #   - name: Configure AWS credentials
-  #     uses: aws-actions/configure-aws-credentials@v4
-  #     with:
-  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       aws-region: ${{ env.AWS_REGION }}
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
 
-  #   - name: Terraform Init
-  #     run: terraform init
+    - name: Terraform Init
+      run: terraform init
 
-  #   - name: Terraform Validate
-  #     run: terraform validate
+    - name: Terraform Validate
+      run: terraform validate
 
-  #   - name: Terraform Plan
-  #     run: terraform plan -out=tfplan
+    - name: Terraform Plan
+      run: terraform plan -out=tfplan
       
-  #   # - name: Terraform Apply
-  #   #   if: github.ref == 'refs/heads/main'
-  #   #   run: terraform apply tfplan
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main'
+      run: terraform apply tfplan
 
-  #   - name: Get Terraform Outputs
-  #     if: github.ref == 'refs/heads/main'
-  #     id: terraform_output
-  #     run: |
-  #       echo "bastion_ip=$(terraform output -raw bastion_public_ip)" >> $GITHUB_OUTPUT
+    - name: Get Terraform Outputs
+      if: github.ref == 'refs/heads/main'
+      id: terraform_output
+      run: |
+        echo "bastion_ip=$(terraform output -raw bastion_public_ip)" >> $GITHUB_OUTPUT
 
   ansible:
     name: 'Ansible Configuration'
-    # needs: terraform
+    needs: terraform
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     defaults:
@@ -107,44 +107,3 @@ jobs:
       run: |
         ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml -v
 
-  # test:
-  #   name: 'Test Deployment' 
-  #   needs: [terraform, ansible]
-  #   if: github.ref == 'refs/heads/main'
-  #   runs-on: ubuntu-latest
-    
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v4
-
-  #   - name: Configure AWS credentials
-  #     uses: aws-actions/configure-aws-credentials@v4
-  #     with:
-  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       aws-region: ${{ env.AWS_REGION }}
-
-  #   - name: Test Geth RPC Endpoint
-  #     run: |
-  #       cd terraform
-  #       ALB_DNS=$(terraform output -raw alb_dns_name)
-  #       echo "Testing Geth RPC at: http://$ALB_DNS"
-        
-  #       # Test if RPC is responding
-  #       curl -X POST \
-  #         -H "Content-Type: application/json" \
-  #         --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
-  #         http://$ALB_DNS || echo "RPC test failed - this is expected initially"
-
-  #   - name: Test Monitoring Endpoints
-  #     run: |
-  #       cd terraform
-  #       MONITORING_IP=$(terraform output -raw monitoring_public_ip)
-  #       echo "Testing Prometheus at: http://$MONITORING_IP:9090"
-  #       echo "Testing Grafana at: http://$MONITORING_IP:3000"
-        
-  #       # Test Prometheus
-  #       curl -f http://$MONITORING_IP:9090/-/healthy || echo "Prometheus health check failed"
-        
-  #       # Test Grafana
-  #       curl -f http://$MONITORING_IP:3000/api/health || echo "Grafana health check failed"
