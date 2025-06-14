@@ -36,6 +36,12 @@
 - name: Setup Monitoring Infrastructure
   hosts: monitoring
   become: yes
+  vars:
+    node_exporter_port: 9100
+    geth_nodes:
+      - { ip: "10.0.1.162", id: 1 }
+      - { ip: "10.0.1.90", id: 2 }
+      - { ip: "10.0.3.21", id: 3 }
   roles:
     - prometheus_server
     - grafana_server
